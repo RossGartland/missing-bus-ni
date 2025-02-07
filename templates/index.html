@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bus Info Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="#">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-6">
+                <h2 class="mb-4">Bus Information Form</h2>
+                <form action="/submit" method="POST">
+                    <div class="mb-3">
+                        <label for="busNumber" class="form-label">Bus Number</label>
+                        <input type="text" class="form-control" id="busNumber" name="busNumber" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="stopName" class="form-label">Stop Name</label>
+                        <input type="text" class="form-control" id="stopName" name="stopName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="time" class="form-label">Time</label>
+                        <input type="time" class="form-control" id="time" name="time" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="additionalInfo" class="form-label">Additional Info</label>
+                        <textarea class="form-control" id="additionalInfo" name="additionalInfo" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div id="recentReports" class="border p-3 rounded">
+                <h2 class="mb-4">Recent Reports</h2>
+                {% if reports %}
+                    <ul class="list-group">
+                        {% for report in reports %}
+                            <li class="list-group-item">
+                                <strong>{{ report.BusNumber }}</strong> at {{ report.StopName }} <br>
+                                <small>{{ report.Date }} {{ report.Time }} - {{ report.Email }}</small> <br>
+                                {{ report.AdditionalInfo }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No reports available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
