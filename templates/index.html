@@ -27,6 +27,20 @@
                             <label for="stopName" class="form-label">Stop Name</label>
                             <input type="text" class="form-control" id="stopName" name="stopName" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason</label>
+                            <select class="form-select" id="reason" name="reason" required>
+                                <option value="" selected disabled>Select a reason</option>
+                                <option value="Bus did not show">Bus did not show</option>
+                                <option value="Bus drove past without stopping">Bus drove past without stopping</option>
+                                <option value="Bus was late">Bus was late</option>
+                                <option value="Other">Other (please specify)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="otherReasonContainer" style="display: none;">
+                            <label for="otherReason" class="form-label">Specify Other Reason</label>
+                            <input type="text" class="form-control" id="otherReason" name="otherReason">
+                        </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="date" class="form-label">Date</label>
@@ -58,9 +72,10 @@
                         {% if reports %}
                             <ul class="list-group">
                                 {% for report in reports %}
-                                    <li class="list-group-item">
+                                    <li class="list-group-item {{ get_reason_class(report.Reason) }}">
                                         <strong>{{ report.BusNumber }}</strong><br>
                                         <small>Stop: {{ report.StopName }}</small> <br>
+                                        <small>Reason: {{ report.Reason }}</small> <br>
                                         <small>Date and Time: {{ report.Date }} {{ report.Time }}</small> <br>
                                         {{ report.AdditionalInfo }}
                                     </li>
@@ -83,6 +98,26 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const reasonSelect = document.getElementById("reason");
+            const otherReasonContainer = document.getElementById("otherReasonContainer");
+            const otherReasonInput = document.getElementById("otherReason");
+    
+            reasonSelect.addEventListener("change", function () {
+                if (this.value === "Other") {
+                    otherReasonContainer.style.display = "block";
+                    otherReasonInput.required = true;
+                } else {
+                    otherReasonContainer.style.display = "none";
+                    otherReasonInput.required = false;
+                    otherReasonInput.value = ""; // Clear input when hidden
+                }
+            });
+        });
+    </script>
+
 <script>
     flatpickr("#time", {
         enableTime: true,

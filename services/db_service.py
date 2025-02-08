@@ -7,7 +7,7 @@ from datetime import datetime
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 table = dynamodb.Table(DYNAMO_TABLE_NAME)
 
-def save_report(bus_number, stop_name, date, time, email, additional_info):
+def save_report(bus_number, stop_name, date, time, email, additional_info, reason):
 
     report_id = str(uuid.uuid4())
 
@@ -15,6 +15,7 @@ def save_report(bus_number, stop_name, date, time, email, additional_info):
         Item={
             "ReportId": report_id,
             "BusNumber": bus_number,
+            "Reason": reason,
             "StopName": stop_name,
             "Date": date,
             "Time": time,
