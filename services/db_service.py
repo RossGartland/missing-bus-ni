@@ -27,6 +27,10 @@ def save_report(bus_number, stop_name, date, time, email, additional_info, reaso
     return response
 
 def get_recent_reports(limit=5):
-    """Retrieve recent reports from DynamoDB."""
-    response = table.scan(Limit=limit)
-    return response.get("Items", [])
+
+    response = table.scan()  
+    reports = response.get("Items", [])
+
+    reports.sort(key=lambda x: x.get("Timestamp", 0), reverse=True)
+
+    return reports[:limit] 
