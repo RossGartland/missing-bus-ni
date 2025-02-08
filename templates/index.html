@@ -44,7 +44,7 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="date" class="form-label">Date</label>
-                                <input type="date" class="form-control" id="date" name="date" required>
+                                <input type="date" class="form-control" id="date" name="date" required max=""> 
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="time" class="form-label">Time</label>
@@ -117,6 +117,13 @@
             });
         });
     </script>
+
+<script> //Prevents a future data from being entered.
+    document.addEventListener("DOMContentLoaded", function () {
+        let today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+        document.getElementById("date").setAttribute("max", today);
+    });
+</script>
 
 <script>
     flatpickr("#time", {
