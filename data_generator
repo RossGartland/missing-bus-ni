@@ -1,0 +1,43 @@
+import boto3
+from datetime import datetime, timedelta
+import uuid
+import random
+from config import AWS_REGION, DYNAMO_TABLE_NAME
+
+dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
+table = dynamodb.Table(DYNAMO_TABLE_NAME)
+
+bus_numbers = ['123', '456', '789', '101', '202']
+stop_names = ['Banbridge', 'Omagh', 'Portrush', 'Bangor', 'Belfast']
+reasons = ['Bus was late', 'Bus did not show', 'Bus drove past without stopping', 'Other']
+additional_info = ['Late arrival', 'No show', 'Mechanical issue', 'Traffic congestion', 'Route deviation']
+
+# Function to generate random data
+def generate_random_report():
+    bus_number = random.choice(bus_numbers)
+    stop_name = random.choice(stop_names)
+    reason = random.choice(reasons)
+    additional = random.choice(additional_info)
+    email = f"test{random.randint(1, 100)}@example.com"
+    date = (datetime.now() - timedelta(days=random.randint(1, 10))).strftime("%Y-%m-%d")
+    time = (datetime.now() - timedelta(minutes=random.randint(0, 180))).strftime("%H:%M")
+    
+    return {
+        "ReportId": str(uuid.uuid4()),
+        "BusNumber": bus_number,
+        "StopName": stop_name,
+        "Date": date,
+        "Time": time,
+        "Email": email,
+        "AdditionalInfo": additional,
+        "Reason": reason,
+        "Timestamp": datetime.now().isoformat()
+    }
+
+# Generate 10 records and insert into DynamoDB
+for _ in range(10):
+    report_data = generate_random_report()
+    print(report_data)
+    table.put_item(Item=report_data)
+
+print("10 records inserted successfully!")
