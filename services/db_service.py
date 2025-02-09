@@ -26,7 +26,7 @@ def save_report(bus_number, stop_name, date, time, email, additional_info, reaso
     )
     return response
 
-def get_recent_reports(limit=6):
+def get_recent_reports(limit):
 
     response = table.scan()  
     reports = response.get("Items", [])
