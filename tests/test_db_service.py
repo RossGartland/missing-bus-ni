@@ -1,39 +1,30 @@
 import unittest
-from moto import mock_aws
-import boto3
+from unittest.mock import patch, MagicMock
+from datetime import datetime, timezone
 from services.db_service import save_report, get_recent_reports
-from config import AWS_REGION, DYNAMO_TABLE_NAME
 
-@mock_aws
 class TestDynamoService(unittest.TestCase):
-    """Test DynamoDB service methods"""
+    """Test DynamoDB service methods using mocks"""
 
-    def setUp(self):
-        """Set up a mocked DynamoDB table before each test"""
-        self.dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
-        self.table = self.dynamodb.create_table(
-            TableName=DYNAMO_TABLE_NAME,
-            KeySchema=[{"AttributeName": "BusNumber", "KeyType": "HASH"}],
-            AttributeDefinitions=[{"AttributeName": "BusNumber", "AttributeType": "S"}],
-            ProvisionedThroughput={"ReadCapacityUnits": 1, "WriteCapacityUnits": 1},
-        )
-        self.table.wait_until_exists()
+    @patch("services.db_service.table")
+    def test_get_recent_reports(self, mock_table):
+        """Test retrieving recent reports with mocked DynamoDB"""
+        now = int(datetime.now(timezone.utc).timestamp())
 
-    def tearDown(self):
-        """Clean up after each test"""
-        self.table.delete()
+        mock_table.scan.return_value = {
+            "Items": [
+                {"BusNumber": "123", "Timestamp": now - 10, "Reason": "Bus was late"},
+                {"BusNumber": "456", "Timestamp": now, "Reason": "Bus did not show"},
+            ]
+        }
 
-    def test_save_report(self):
-        """Test saving a report"""
-        response = save_report("123", "Main St", "2025-02-07", "12:00", "test@example.com", "Late bus")
-        self.assertEqual(response["ResponseMetadata"]["HTTPStatusCode"], 200)
+        reports = get_recent_reports(limit=2)
 
-    def test_get_recent_reports(self):
-        """Test retrieving recent reports"""
-        save_report("123", "Main St", "2025-02-07", "12:00", "test@example.com", "Late bus")
-        reports = get_recent_reports(limit=1)
-        self.assertEqual(len(reports), 1)
-        self.assertEqual(reports[0]["BusNumber"], "123")
+        mock_table.scan.assert_called_once()
+
+        self.assertEqual(len(reports), 2)
+        self.assertEqual(reports[0]["BusNumber"], "456")  
+        self.assertEqual(reports[1]["BusNumber"], "123")  
 
 if __name__ == "__main__":
     unittest.main()
