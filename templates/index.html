@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
+    {% include 'navbar.html' %} 
     <div class="container mt-5">
         <h1>Missing Bus Reporter</h1>
         <h2>Have you ever waited on a bus that was late or did not show? Let us know.</h2>
@@ -68,31 +69,86 @@
             <div class="col-lg-7">
                 <div class="card mb-4">
                     <h2 class="mb-3 text-primary">Recent Reports</h2>
-                    <div id="recentReports">
+                    <div id="recentReports" class="row g-4">
                         {% if reports %}
-                            <ul class="list-group">
-                                {% for report in reports %}
-                                    <li class="list-group-item {{ get_reason_class(report.Reason) }}">
-                                        <strong>{{ report.BusNumber }}</strong><br>
-                                        <small>Stop: {{ report.StopName }}</small> <br>
-                                        <small>Reason: {{ report.Reason }}</small> <br>
-                                        <small>Date and Time: {{ report.Date }} {{ report.Time }}</small> <br>
-                                        {{ report.AdditionalInfo }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+                            <!-- Loop over reports and display 2 in each row -->
+                            {% for report in reports[:8] %}
+                                <div class="col-md-6">
+                                    <div class="card {{ get_reason_class(report.Reason) }}">
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ report.BusNumber }}</h5>
+                                            <p class="card-text fs-7">
+                                                <strong>Stop:</strong> {{ report.StopName }}<br>
+                                                <strong>Reason:</strong> {{ report.Reason }}<br>
+                                                <strong>Date and Time:</strong> {{ report.Date }} {{ report.Time }}<br>
+                                                <strong>Additional Info:</strong> {{ report.AdditionalInfo }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         {% else %}
                             <p class="text-muted">No reports available.</p>
                         {% endif %}
-                        <p class="mt-2"><a class="link-primary text-decoration-none" href="#">View More ></a></p>
                     </div>
-                </div>
-
-                <!-- Graph Placeholder -->
-                <div class="graph-placeholder">
-                    Graph Placeholder
+                    <p class="mt-2"><a class="link-primary text-decoration-none" href="#">View More ></a></p>
                 </div>
             </div>
+            <!-- Graph Section -->
+<div class="row g-4 mt-5">
+    <!-- First Graph (Top Row) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Graph 1</h5>
+                <div id="graph1">
+                    <!-- Placeholder for Graph 1 -->
+                    <p>Graph content here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Graph (Top Row) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Graph 2</h5>
+                <div id="graph2">
+                    <!-- Placeholder for Graph 2 -->
+                    <p>Graph content here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Third Graph (Bottom Row) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Graph 3</h5>
+                <div id="graph3">
+                    <!-- Placeholder for Graph 3 -->
+                    <p>Graph content here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fourth Graph (Bottom Row) -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Graph 4</h5>
+                <div id="graph4">
+                    <!-- Placeholder for Graph 4 -->
+                    <p>Graph content here...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

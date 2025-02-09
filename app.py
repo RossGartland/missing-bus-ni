@@ -29,12 +29,12 @@ def submit():
 
 def get_reason_class(reason):
     reason_classes = {
-        "Bus did not show": "list-group-item-danger",  
-        "Bus was late": "list-group-item-warning",  
-        "Bus drove past without stopping": "list-group-item-info",  
-        "Other": "list-group-item-secondary",  
+        "Bus did not show": "bg-danger",  
+        "Bus was late": "bg-warning",  
+        "Bus drove past without stopping": "bg-info",  
+        "Other": "bg-secondary",  
     }
-    return reason_classes.get(reason, "list-group-item-light")  # Default colour
+    return reason_classes.get(reason, "bg-light")  # Default colour
 
 if __name__ == "__main__":
     app.run(debug=True)
