@@ -1,0 +1,173 @@
+<div class="container mt-5">
+    <h1 class="text-center">Missing Bus Reports - Graphs</h1>
+    <div class="row g-4 mt-4">
+        <!-- Graph 1: Reason Counts (Bar Chart) -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reports by Reason</h5>
+                    <canvas id="reasonChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graph 2: Reports Over Time (Line Chart) -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reports Over Time</h5>
+                    <canvas id="timeChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row g-4 mt-4">
+        <!-- Graph 3: Distribution of Reports by Reason (Pie Chart) -->
+         <div class="col-md-6">
+            <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Distribution of Reports by Reason</h5>
+            <canvas id="reasonPieChart"></canvas>
+        </div>
+    </div>
+</div>
+<!-- Graph 4: Reports by Bus Number (Bar Chart) -->
+<div class="col-md-6">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Reports by Bus Number</h5>
+            <canvas id="busNumberChart"></canvas>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+    const reasonCounts = {{ reason_counts | tojson }};
+    const dateCounts = {{ date_counts | tojson }};
+    
+    // --- Graph 1: Reason Counts ---
+    const reasonLabels = Object.keys(reasonCounts);
+    const reasonData = Object.values(reasonCounts);
+    
+    const reasonCtx = document.getElementById('reasonChart').getContext('2d');
+    new Chart(reasonCtx, {
+        type: 'bar',
+        data: {
+            labels: reasonLabels,
+            datasets: [{
+                label: 'Reports by Reason',
+                data: reasonData,
+                backgroundColor: ['#ffadad', '#ffb3e6', '#c2f0c2', '#ffcc99'],
+                borderColor: ['#ff7878', '#ff66b2', '#4caf50', '#ff9800'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    // --- Graph 2: Reports Over Time ---
+    const dateLabels = Object.keys(dateCounts);
+    const dateData = Object.values(dateCounts);
+
+    const timeCtx = document.getElementById('timeChart').getContext('2d');
+    new Chart(timeCtx, {
+        type: 'line',
+        data: {
+            labels: dateLabels,
+            datasets: [{
+                label: 'Reports Over Time',
+                data: dateData,
+                fill: false,
+                borderColor: '#42a5f5',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Report Count'
+                    }
+                }
+            }
+        }
+    });
+
+    // Graph 3: Distribution of Reports by Reason (Pie Chart)
+const reasonPieCtx = document.getElementById('reasonPieChart').getContext('2d');
+new Chart(reasonPieCtx, {
+    type: 'pie',
+    data: {
+        labels: reasonLabels,
+        datasets: [{
+            label: 'Reports by Reason',
+            data: reasonData,
+            backgroundColor: ['#ffadad', '#ffb3e6', '#c2f0c2', '#ffcc99'],
+            borderColor: ['#ff7878', '#ff66b2', '#4caf50', '#ff9800'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(tooltipItem) {
+                        return tooltipItem.label + ': ' + tooltipItem.raw + ' reports';
+                    }
+                }
+            }
+        }
+    }
+});
+
+// Graph 4: Reports by Bus Number (Bar Chart)
+const busNumbers = {{ bus_numbers | tojson }}; 
+const busLabels = Object.keys(busNumbers);
+const busData = Object.values(busNumbers);
+
+const busCtx = document.getElementById('busNumberChart').getContext('2d');
+new Chart(busCtx, {
+    type: 'bar',
+    data: {
+        labels: busLabels,
+        datasets: [{
+            label: 'Reports by Bus Number',
+            data: busData,
+            backgroundColor: '#4caf50',
+            borderColor: '#388e3c',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>

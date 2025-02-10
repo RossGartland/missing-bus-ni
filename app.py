@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request, redirect
-from services.db_service import save_report, get_recent_reports
+from services.db_service import save_report, get_recent_reports, generate_graph_data  
 
 app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def index():
     reports = get_recent_reports(6)
-    return render_template("index.html", reports=reports, get_reason_class=get_reason_class)
+
+    reason_counts, date_counts, bus_numbers = generate_graph_data()
+
+    return render_template("index.html", 
+                           reports=reports, get_reason_class=get_reason_class, 
+                           reason_counts=reason_counts, date_counts=date_counts,  bus_numbers=bus_numbers)
 
 @app.route("/submit", methods=["POST"])
 def submit():
