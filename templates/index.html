@@ -63,36 +63,8 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Recent Reports & Graph Section -->
             <div class="col-lg-7">
-                <div class="card mb-4">
-                    <h2 class="mb-3 text-primary">Recent Reports</h2>
-                    <div id="recentReports" class="row g-4">
-                        {% if reports %}
-                            {% for report in reports[:8] %}
-                                <div class="col-md-6">
-                                    <div class="card {{ get_reason_class(report.Reason) }}">
-                                        <div class="card-body">
-                                            <h5 class="card-title">{{ report.BusNumber }}</h5>
-                                            <p class="card-text fs-7">
-                                                <strong>Stop:</strong> {{ report.StopName }}<br>
-                                                <strong>Reason:</strong> {{ report.Reason }}<br>
-                                                <strong>Date and Time:</strong> {{ report.Date }} {{ report.Time }}<br>
-                                                <strong>Additional Info:</strong> {{ report.AdditionalInfo }}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p class="text-muted">No reports available.</p>
-                        {% endif %}
-                    </div>
-                    <p class="mt-2 text-end text-sm-center">
-                        <a class="link-primary text-decoration-none" href="/reports"><u>View More</u></a>
-                    </p>
-                </div>
+                {% include 'recent_reports.html' %}
             </div>
             <div class="row g-4 mt-5">
                 {% include 'graphs.html' %}
