@@ -34,3 +34,7 @@ body {
 .card-body {
     padding: 1.5rem; 
 }
+
+#reasonPieChart {
+    max-height: 265px !important;
+}
